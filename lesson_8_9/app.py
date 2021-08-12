@@ -81,7 +81,7 @@ def print_current_status(mistakes, blanks):
     print("Угаданные буквы:", blanks)
 
 
-def get_guess(word, guesses):
+def get_guess(guesses):
     """
     Возвращает букву, введенную игроком. Эта функция проверяет,
     что игрок ввел только одну букву и ничего больше.
@@ -89,21 +89,40 @@ def get_guess(word, guesses):
     :param guesses: буквы которые были введены ранее.
     :return:
     """
-    # word = акула
-    # guesses = ['a']
-    # guess = b
     while True:
         guess = input("Введите букву:")
         guess = guess.lower()
         if len(guess) != 1:
             print('Вы ввели больше одной буквы. Вы можете ввести только одну букву.')
             print('Попробуйте еще раз.')
+            continue
+        elif guess not in 'абвгдеежзийклмнопрстуфхцчшщъыьэюя':
+            print(f"Вы ввели символ не из Русского алфавита. Ваша буква: '{guess}'")
+            print('Пожалуйста, введите русскую букву.')
+            continue
         elif guess in guesses:
             print('Вы уже называли эту букву. Назовите другую.')
-        elif guess not in 'абвгдеежзийклмнопрстуфхцчшщъыьэюя':
-            print('Пожалуйста, введите БУКВУ.')
+            continue
         else:
             return guess
+
+
+def check_guess(secret_word, user_guess):
+    if user_guess in secret_word:
+        return True
+    else:
+        return False
+
+
+def update_blanks(blanks, letter, secret_word):
+    pass
+
+
+
+# Сравнить каждую букву в secret_word с letter
+# Елси буквы равны то заменить символ под темже индексом в blanks
+# что и символ в secret_word буквой из letter
+
 
 
 def main():
@@ -112,5 +131,14 @@ def main():
     mistakes = 0
     blanks = '_' * len(random_word)
     print_current_status(mistakes, blanks)
+    user_guesses = list()
+    if mistakes >= 6:
+        print("Вы проиграли")
+    else:
+        guess = get_guess(user_guesses)
+        user_guesses.append(guess)
+        check = check_guess(random_word, guess)
+        if check:
+
 
 
