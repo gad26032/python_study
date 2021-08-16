@@ -114,9 +114,11 @@ def check_guess(secret_word, user_guess):
         return False
 
 
-def update_blanks(blanks, letter, secret_word):
-    pass
-
+def update_blanks(secret_word, letter, blanks):
+    for i in range(len(secret_word)):
+        if secret_word[i] in letter:
+            blanks = blanks[:i] + secret_word[i] + blanks[i + 1:]
+    return blanks
 
 # Сравнить каждую букву в secret_word с letter
 # Елси буквы равны то заменить символ под темже индексом в blanks
@@ -136,15 +138,21 @@ def main():
     random_word = get_random_word(words_list)
     mistakes = 0
     blanks = '_' * len(random_word)
-    print_current_status(mistakes, blanks)
     user_guesses = list()
-    if mistakes >= 6:
-        print("Вы проиграли")
-    else:
-        guess = get_guess(user_guesses)
-        user_guesses.append(guess)
-        check = check_guess(random_word, guess)
-        if check:
+    while True:
+        print_current_status(mistakes, blanks)
+        if mistakes >= 6:
+            print("Вы проиграли")
+            break
+        else:
+            guess = get_guess(user_guesses)
+            user_guesses.append(guess)
+            check = check_guess(random_word, guess)
+            if check:
+                blanks = update_blanks(random_word, guess, blanks)
+            else:
+                mistakes += 1
 
-
+if __name__ == "__main__":
+    main()
 
